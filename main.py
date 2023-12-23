@@ -1,300 +1,470 @@
-# Algoritmo de Dijsktra
-class arista:
-    def __int__(self, id):
-        self.id = id
+class Vertice:
+    def __int__(self,i):
+        self.id = i
         self.vecinos = []
-        self.visitados = False
+        self.visitado = False
         self.padre = None
-        #Ponderación o distancia
-        #self.distancia= float('inf')
-        #Esto puesto que el costo desconocido es infinito hasta recorrerlo
+        self.distancia = float('inf')
 
-    """
-        def agregar_vecino(self, vertice, p):
-        if vertice not in self.vecinos:
-            self.vecinos.append([vertice, p])
-    """
-
-class vertice:
-    def __int__(self, vertices):
-        self.vertices = {}
-        self.distancia = float
+    def agregarVecino(self,v,p):
+        if v not in self.vecinos:
+            self.vecinos.append([v,p])
 
 class Grafica:
     def __int__(self):
-        self.vertices ={}
+        self.vertices = {}
 
-    def agregar_vecino(self, vertice, p):
-        if vertice not in self.vecinos:
-            self.vecinos.append([vertice, p])
-
-    def agregar_vertice(self, id):
+    def agregarVertice(self,id):
         if id not in self.vertices:
-            self.vertices[id] = vertice(id)
+            self.vertices[id] = Vertice(id)
 
-    def agregar_arista(self, vertice_a, vertice_b, peso):
-        if vertice_a in self.vertices and vertice_b in self.vertices:
-            self.vertices[vertice_a].agregar_vecino(vertice_b, peso)
-            self.vertices[vertice_a].agregar_vecino(vertice_b, peso)
-            self.G.add_edge(vertice_a,vertice_b,peso)
+    def agregarArista(self,a,b,p):
+        if a in self.verticesa and b in self.vertices:
+            self.vertices[a].agregarVecino(b,p)
+            self.vertices[b].agregarVecino(a,p)
 
-    def obtener_camino(self, vertice_b):
-        camino = 0
-        actual = vertice_b
-        while (actual != None):
-            camino.insert(0, actual)
+    def imprimirGrafica(self):
+        for v in self.vertices:
+            print("La distancia entre"+str(v)+"es"+str(self.vertices[v].distancia)+"llegando desde"+str(self.
+            vertices[v].padre))
+
+    def camino(self,a,b):
+        camino = []
+        actual = b
+        while actual != None:
+            camino.insert(0,actual)
             actual = self.vertices[actual].padre
-        return [camino, self.vertices[vertice_b].distancia]
-
+        return [camino,self.vertices[b].distancia]
     def minimo(self,lista):
         if len(lista) > 0:
             m = self.vertices[lista[0]].distancia
-            vertice = lista[0]
+            v = lista[0]
             for e in lista:
-                if m>self.vertices[e].distancia:
-                    m=self.vertices[e].distancia
-                    vertice=e
-            return vertice
+                if m > self.vertices[e].distancia:
+                    m = self.vertices[e].distancia
+                    v = e
+            return v
 
-    def dijkstra(self,vertice_a):
-        if vertice in self.vertices:
-            self.vertices[vertice_a].distancia = 0
-            actual = vertice_a
-            no_visitados = []
+    def dijkstra(self,a):
+        if a in self.vertices:
+            self.vertices[a].distancia = 0
+            actual = a
+            noVisitados = []
 
-         # Se agregan todos los nodos no visitados
-        for v in self.vertices:
-            if v !=vertice_a:
-                self.vertices[vertice].distancia= float('inf')
-            self.vertices[vertice].padre=None
-            no_visitados
-        # En esta parte es cuando dado los vertices se toma el camino minimo
-        while(len(no_visitados) > 0):
-            for vecino in self.vertices[actual].vecinos:
-                if self.vertices[vecino[0]].visitado == False:
-                    if self.vertices[actual].distancia + vecino[1] < self.vertices[vecino[0]].distancia:
-                        self.vertices[vecino[0]].distancia = self.vertices[actual].distancia + vecino[1]
-                        self.vertices[vecino[0]].padre = actual
-            self.vertices[actual].visitado = True
-            no_visitados.remove(actual)
-            actual = self.minimo(no_visitados)
+            for v in self.vertices:
+                if v !=a:
+                    self.vertices[v].distancia = float('inf')
+                self.vertices[v].padre = None
+                noVisitados.append(v)
+            while len(noVisitados) > 0:
+                for vecino in self.vertices[actual].vecino:
+                    if self.vertices[vecino[0]].visitado == False:
+                        if self.vertices[actual].distancia + vecino[1] < self.vertices[vecino[0]].distancia:
+                            self.vertices[vecino[0]].distancia = self.vertices[actual].distancia + vecino[1]
+                            self.vertices[vecino[0]].padre = actual
+
+                self.vertices[actual].visitado = True
+                noVisitados.remove(actual)
+                actual = self.minimo(noVisitados)
         else:
             return False
-
-if __name__ =='__main__':
-# Aqui se define a las arista como estaciones del metro
-# Los vertices como la distancia que hay entre estaciones
-    g  = Grafica()
-    g.agregar_vertice("Observatorio")
-    g.agregar_vertice("Tacubaya")
-    g.agregar_vertice("Juanacatlan")
-    g.agregar_vertice("Chapultepec")
-    g.agregar_vertice("Sevilla")
-    g.agregar_vertice("Insurgentes")
-    g.agregar_vertice("Cuauhtemoc")
-    g.agregar_vertice("Balderas")
-    g.agregar_vertice("Salto del agua")
-    g.agregar_vertice("Isabel La catolica ")
-    g.agregar_vertice("Pino Suarez")
-    g.agregar_vertice("Merced")
-    g.agregar_vertice("Candelaria")
-    g.agregar_vertice("San Lazaro")
-    g.agregar_vertice("Moctezuma")
-    g.agregar_vertice("Balbuena")
-    g.agregar_vertice("Boulevard Puerto Aereo")
-    g.agregar_vertice("Gomez Farias")
-    g.agregar_vertice("Zaragoza")
-    g.agregar_vertice("Pantitlan")
+if __name__ == '__main__':
+    g = Grafica()
+    g.agregarVertice("Observatorio")
+    g.agregarVertice("Tacubaya")
+    g.agregarVertice("Juanacatlan")
+    g.agregarVertice("Chapultepec")
+    g.agregarVertice("Sevilla")
+    g.agregarVertice("Insurgentes")
+    g.agregarVertice("Cuauhtemoc")
+    g.agregarVertice("Balderas")
+    g.agregarVertice("Salto del agua")
+    g.agregarVertice("Isabel La catolica ")
+    g.agregarVertice("Pino Suarez")
+    g.agregarVertice("Merced")
+    g.agregarVertice("Candelaria")
+    g.agregarVertice("San Lazaro")
+    g.agregarVertice("Moctezuma")
+    g.agregarVertice("Balbuena")
+    g.agregarVertice("Boulevard Puerto Aereo")
+    g.agregarVertice("Gomez Farias")
+    g.agregarVertice("Zaragoza")
+    g.agregarVertice("Pantitlan")
     # Linea 2
-    g.agregar_vertice("Cuatro Camino")
-    g.agregar_vertice("Panteones")
-    g.agregar_vertice("Tacuba")
-    g.agregar_vertice("Cuitlahuac")
-    g.agregar_vertice("Popotla")
-    g.agregar_vertice("Colegio Militar")
-    g.agregar_vertice("Normal")
-    g.agregar_vertice("San Cosme")
-    g.agregar_vertice("Revolucion")
-    g.agregar_vertice("Hidalgo")
-    g.agregar_vertice("Bellas artes")
-    g.agregar_vertice("Allende")
-    g.agregar_vertice("Zocalo")
+    g.agregarVertice("Cuatro Camino")
+    g.agregarVertice("Panteones")
+    g.agregarVertice("Tacuba")
+    g.agregarVertice("Cuitlahuac")
+    g.agregarVertice("Popotla")
+    g.agregarVertice("Colegio Militar")
+    g.agregarVertice("Normal")
+    g.agregarVertice("San Cosme")
+    g.agregarVertice("Revolucion")
+    g.agregarVertice("Hidalgo")
+    g.agregarVertice("Bellas artes")
+    g.agregarVertice("Allende")
+    g.agregarVertice("Zocalo")
     # Pino Suarez es tranborde
-    g.agregar_vertice("San Antonio Abad")
-    g.agregar_vertice("Chabacano")
-    g.agregar_vertice("Viaducto")
-    g.agregar_vertice("Xola")
-    g.agregar_vertice("Villa de Cortes")
-    g.agregar_vertice("Nativitas")
-    g.agregar_vertice("Portales")
-    g.agregar_vertice("Ermita")
-    g.agregar_vertice("General Anaya")
-    g.agregar_vertice("Tasqueña")
+    g.agregarVertice("San Antonio Abad")
+    g.agregarVertice("Chabacano")
+    g.agregarVertice("Viaducto")
+    g.agregarVertice("Xola")
+    g.agregarVertice("Villa de Cortes")
+    g.agregarVertice("Nativitas")
+    g.agregarVertice("Portales")
+    g.agregarVertice("Ermita")
+    g.agregarVertice("General Anaya")
+    g.agregarVertice("Tasqueña")
     # Linea 3
-    g.agregar_vertice("Indios Verdes")
-    g.agregar_vertice("Deportivo 18 de Marzo")
-    g.agregar_vertice("Potrero")
-    g.agregar_vertice("La raza")
-    g.agregar_vertice("Tlatelolco")
-    g.agregar_vertice("Guerrero")
+    g.agregarVertice("Indios Verdes")
+    g.agregarVertice("Deportivo 18 de Marzo")
+    g.agregarVertice("Potrero")
+    g.agregarVertice("La raza")
+    g.agregarVertice("Tlatelolco")
+    g.agregarVertice("Guerrero")
     # Hidalgo es trasborde
-    g.agregar_vertice("Juarez")
+    g.agregarVertice("Juarez")
     # Balderas es transborde
-    g.agregar_vertice("Niños Heroes")
-    g.agregar_vertice("Hospital General")
-    g.agregar_vertice("Centro Medico")
-    g.agregar_vertice("Etiopia")
-    g.agregar_vertice("Eugenia")
-    g.agregar_vertice("Division del Norte")
-    g.agregar_vertice("Zapata")
-    g.agregar_vertice("Coyoacan")
-    g.agregar_vertice("Viveros")
-    g.agregar_vertice("Miguel Angel de Quevedo")
-    g.agregar_vertice("Copilco")
-    g.agregar_vertice("Universidad")
+    g.agregarVertice("Niños Heroes")
+    g.agregarVertice("Hospital General")
+    g.agregarVertice("Centro Medico")
+    g.agregarVertice("Etiopia")
+    g.agregarVertice("Eugenia")
+    g.agregarVertice("Division del Norte")
+    g.agregarVertice("Zapata")
+    g.agregarVertice("Coyoacan")
+    g.agregarVertice("Viveros")
+    g.agregarVertice("Miguel Angel de Quevedo")
+    g.agregarVertice("Copilco")
+    g.agregarVertice("Universidad")
     # Linea 4
-    g.agregar_vertice("Martin Carrera")
-    g.agregar_vertice("Talisman")
-    g.agregar_vertice("Bondojito")
-    g.agregar_vertice("Consulado")
-    g.agregar_vertice("Canal del norte")
-    g.agregar_vertice("Morelos")
+    g.agregarVertice("Martin Carrera")
+    g.agregarVertice("Talisman")
+    g.agregarVertice("Bondojito")
+    g.agregarVertice("Consulado")
+    g.agregarVertice("Canal del norte")
+    g.agregarVertice("Morelos")
     # Candelaria es transborde
-    g.agregar_vertice("")
-    g.agregar_vertice("Fray Servando")
-    g.agregar_vertice("Jamaica")
-    g.agregar_vertice("Santa Anita")
+    g.agregarVertice("Fray Servando")
+    g.agregarVertice("Jamaica")
+    g.agregarVertice("Santa Anita")
     # Linea 5
     # Pantitlan es transborde
-    g.agregar_vertice("Hangares")
-    g.agregar_vertice("Terminal area")
-    g.agregar_vertice("Oceania")
-    g.agregar_vertice("Aragon")
-    g.agregar_vertice("Eduardo Molina")
-    g.agregar_vertice("Consulado")
-    g.agregar_vertice("Valle Gomez")
-    g.agregar_vertice("Misterios")
+    g.agregarVertice("Hangares")
+    g.agregarVertice("Terminal area")
+    g.agregarVertice("Oceania")
+    g.agregarVertice("Aragon")
+    g.agregarVertice("Eduardo Molina")
+    # Consulado es transborde
+    g.agregarVertice("Valle Gomez")
+    g.agregarVertice("Misterios")
     # La raza es trasborde
-    g.agregar_vertice("Autobuses del norte")
-    g.agregar_vertice("Instituto del petroleo")
-    g.agregar_vertice("Politecnico")
-    #Linea 6
-    g.agregar_vertice("El rosario")
-    g.agregar_vertice("Tezozomoc")
-    g.agregar_vertice("UAM Azcapotzalco")
-    g.agregar_vertice("Arena Ciudad de Mexico")
-    g.agregar_vertice("Norte 45")
-    g.agregar_vertice("Vallejo")
+    g.agregarVertice("Autobuses del norte")
+    g.agregarVertice("Instituto del petroleo")
+    g.agregarVertice("Politecnico")
+    # Linea 6
+    g.agregarVertice("El rosario")
+    g.agregarVertice("Tezozomoc")
+    g.agregarVertice("UAM Azcapotzalco")
+    g.agregarVertice("Arena Ciudad de Mexico")
+    g.agregarVertice("Norte 45")
+    g.agregarVertice("Vallejo")
     # Instuto del petroleo es transborde
-    g.agregar_vertice("Lindavista")
+    g.agregarVertice("Lindavista")
     # Deportivo 18 de marzo es transborde
-    g.agregar_vertice("La Villa")
+    g.agregarVertice("La Villa")
     # Martin Carrera es transborde
     # Linea 7
     # El rosario es transborde
-    g.agregar_vertice("Aquiles Serdan")
-    g.agregar_vertice("Camarones")
-    g.agregar_vertice("Refineria")
+    g.agregarVertice("Aquiles Serdan")
+    g.agregarVertice("Camarones")
+    g.agregarVertice("Refineria")
     # Tacuba es transborde
-    g.agregar_vertice("San Joaquin")
-    g.agregar_vertice("Polanco")
-    g.agregar_vertice("Auditorio")
-    g.agregar_vertice("Constituyentes")
+    g.agregarVertice("San Joaquin")
+    g.agregarVertice("Polanco")
+    g.agregarVertice("Auditorio")
+    g.agregarVertice("Constituyentes")
     # Tacubaya es transborde
-    g.agregar_vertice("San Pedro de los Pinos")
-    g.agregar_vertice("San Antonio")
-    g.agregar_vertice("Mixcoac")
-    g.agregar_vertice("Barranca del Muerto ")
+    g.agregarVertice("San Pedro de los Pinos")
+    g.agregarVertice("San Antonio")
+    g.agregarVertice("Mixcoac")
+    g.agregarVertice("Barranca del Muerto ")
     # Linea 8
-    g.agregar_vertice("Garibaldi")
+    g.agregarVertice("Garibaldi")
     # Bellas Artes es transborde
-    g.agregar_vertice("San Juan Letran")
+    g.agregarVertice("San Juan Letran")
     # Salto del agua es transborde
-    g.agregar_vertice("Doctores")
-    g.agregar_vertice("Obrera")
+    g.agregarVertice("Doctores")
+    g.agregarVertice("Obrera")
     # Chabacano es transborde
-    g.agregar_vertice("La viga")
+    g.agregarVertice("La viga")
     # Santa Anita es transborde
-    g.agregar_vertice("Coyuya")
-    g.agregar_vertice("Iztacalco")
-    g.agregar_vertice("Apatlaco")
-    g.agregar_vertice("Aculco")
-    g.agregar_vertice("Escuadron 201")
-    g.agregar_vertice("Atlalico")
-    g.agregar_vertice("Iztapalapa")
-    g.agregar_vertice("Cerro de la Estralla")
-    g.agregar_vertice("UAMa")
-    g.agregar_vertice("Constitucion de 1917")
+    g.agregarVertice("Coyuya")
+    g.agregarVertice("Iztacalco")
+    g.agregarVertice("Apatlaco")
+    g.agregarVertice("Aculco")
+    g.agregarVertice("Escuadron 201")
+    g.agregarVertice("Atlalico")
+    g.agregarVertice("Iztapalapa")
+    g.agregarVertice("Cerro de la Estralla")
+    g.agregarVertice("UAM")
+    g.agregarVertice("Constitucion de 1917")
     # Linea 9
     # Tacubaya es transborde
-    g.agregar_vertice("Patriotismo")
-    g.agregar_vertice("Chilpancingo")
+    g.agregarVertice("Patriotismo")
+    g.agregarVertice("Chilpancingo")
     # Centro Medico es transborde
-    g.agregar_vertice("Lazaro Cardenas")
+    g.agregarVertice("Lazaro Cardenas")
     # Chabacano es transborde
     # Jamaica es transborde
-    g.agregar_vertice("Mixiuhca")
-    g.agregar_vertice("Velodromo")
-    g.agregar_vertice("Ciudad deportiva")
-    g.agregar_vertice("Puebla")
+    g.agregarVertice("Mixiuhca")
+    g.agregarVertice("Velodromo")
+    g.agregarVertice("Ciudad deportiva")
+    g.agregarVertice("Puebla")
     # Pantitlan es transborde
     # Linea A
     # Pantitlan es transborde
-    g.agregar_vertice("Agricola Oriental")
-    g.agregar_vertice("Canal de San Juan")
-    g.agregar_vertice("Tepalcates")
-    g.agregar_vertice("Guelatao")
-    g.agregar_vertice("Peñon Viejo")
-    g.agregar_vertice("Acatitla")
-    g.agregar_vertice("Santa Marta")
-    g.agregar_vertice("Los reyes")
-    g.agregar_vertice("La paz")
+    g.agregarVertice("Agricola Oriental")
+    g.agregarVertice("Canal de San Juan")
+    g.agregarVertice("Tepalcates")
+    g.agregarVertice("Guelatao")
+    g.agregarVertice("Peñon Viejo")
+    g.agregarVertice("Acatitla")
+    g.agregarVertice("Santa Marta")
+    g.agregarVertice("Los reyes")
+    g.agregarVertice("La paz")
     # Linea B
-    g.agregar_vertice("Buenavista")
+    g.agregarVertice("Buenavista")
     # Guerrero es transborde
     # Garibaldi es transborde
-    g.agregar_vertice("Lagunilla")
-    g.agregar_vertice("Tepito")
+    g.agregarVertice("Lagunilla")
+    g.agregarVertice("Tepito")
     # Morelos es trasborde
     # San lazaro es transborde
-    g.agregar_vertice("Ricardo Flores Magon")
-    g.agregar_vertice("Romero Rubio")
+    g.agregarVertice("Ricardo Flores Magon")
+    g.agregarVertice("Romero Rubio")
     # Oceania es transborde
-    g.agregar_vertice("Deportivo Oceania")
-    g.agregar_vertice("Bosque de Aragon")
-    g.agregar_vertice("Villa de Aragon")
-    g.agregar_vertice("Nezahualcoyotl")
-    g.agregar_vertice("Impulsora")
-    g.agregar_vertice("Rio de los remedios")
-    g.agregar_vertice("Muzquiz")
-    g.agregar_vertice("Ecatepec")
-    g.agregar_vertice("Olimpica")
-    g.agregar_vertice("Plaza Aragon")
-    g.agregar_vertice("Ciudad Azteca")
-    #Linea 12
+    g.agregarVertice("Deportivo Oceania")
+    g.agregarVertice("Bosque de Aragon")
+    g.agregarVertice("Villa de Aragon")
+    g.agregarVertice("Nezahualcoyotl")
+    g.agregarVertice("Impulsora")
+    g.agregarVertice("Rio de los remedios")
+    g.agregarVertice("Muzquiz")
+    g.agregarVertice("Ecatepec")
+    g.agregarVertice("Olimpica")
+    g.agregarVertice("Plaza Aragon")
+    g.agregarVertice("Ciudad Azteca")
+    # Linea 12
     # Mixcoac
-    g.agregar_vertice("Insurgentes Sur")
-    g.agregar_vertice("Hospital 20 de Noviembre")
+    g.agregarVertice("Insurgentes Sur")
+    g.agregarVertice("Hospital 20 de Noviembre")
     # Zapata es transborde
-    g.agregar_vertice("Parque de los venados")
-    g.agregar_vertice("Eje central")
+    g.agregarVertice("Parque de los venados")
+    g.agregarVertice("Eje central")
     # Ermita es transborde
-    g.agregar_vertice("Mexicaltzingo")
+    g.agregarVertice("Mexicaltzingo")
     # Atlatlilco es transborde
-    g.agregar_vertice("Culhuacan ")
-    g.agregar_vertice("San Andres Tomatlan")
-    g.agregar_vertice("Lomas estrella ")
-    g.agregar_vertice("Calle 11")
-    g.agregar_vertice("Periferico Oriente")
-    g.agregar_vertice("Tezonco")
-    g.agregar_vertice("Olivos")
-    g.agregar_vertice("Nopalera")
-    g.agregar_vertice("Zapotitlan")
-    g.agregar_vertice("Tlaltenco")
-    g.agregar_vertice("Tlahuac")
+    g.agregarVertice("Culhuacan ")
+    g.agregarVertice("San Andres Tomatlan")
+    g.agregarVertice("Lomas estrella ")
+    g.agregarVertice("Calle 11")
+    g.agregarVertice("Periferico Oriente")
+    g.agregarVertice("Tezonco")
+    g.agregarVertice("Olivos")
+    g.agregarVertice("Nopalera")
+    g.agregarVertice("Zapotitlan")
+    g.agregarVertice("Tlaltenco")
+    g.agregarVertice("Tlahuac")
+    g.agregarArista("Pantitlan","Zaragoza",1320)
+    g.agregarArista("Zaragoza","Gomez Farias",762)
+    g.agregarArista("Gomez Farias","Boulevard Puerto Aereo",611)
+    g.agregarArista("Boulevard Puerto Aereo","Balbuena",595)
+    g.agregarArista("Balbuena","Moctezuma",703)
+    g.agregarArista("Moctezuma","San lazaro",478)
+    g.agregarArista("San Lazaro","Candelaria",866)
+    g.agregarArista("Candelaria","Merced",698)
+    g.agregarArista("Merced","Pino Suarez",745)
+    g.agregarArista("Pino Suarez","Isabel La Catolica",382)
+    g.agregarArista("Isabel La Catolica","Salto del Agua",445)
+    g.agregarArista("Salto del Agua","Balderas",458)
+    g.agregarArista("Balderas","Cuauhtemoc",409)
+    g.agregarArista("Cuauhtemoc","Insurgentes",793)
+    g.agregarArista("Insurgentes","Sevilla",645)
+    g.agregarArista("Sevilla","Chapultepec",501)
+    g.agregarArista("Chapultepec","Juanacatlan",973)
+    g.agregarArista("Juanacatlan","Tacubaya",1158)
+    g.agregarArista("Tacubaya","Observatorio",1262)
+    g.agregarArista("Cuatro Caminos","Panteones",1639)
+    g.agregarArista("Panteones","Tacuba",1416)
+    g.agregarArista("Tacuba","Cuitlahuac",637)
+    g.agregarArista("Cuitlahuac","Popotla",620)
+    g.agregarArista("Popotla","Colegio Militar",462)
+    g.agregarArista("Colegio Militar","Normal",516)
+    g.agregarArista("Normal","San Cosme",657)
+    g.agregarArista("San Cosme","Revolucion",537)
+    g.agregarArista("Revolucion","Hidalgo",587)
+    g.agregarArista("Hidalgo","Bellas Artes",447)
+    g.agregarArista("Bellas Artes","Allende",387)
+    g.agregarArista("Allende","Zocalo",602)
+    g.agregarArista("Zocalo","Pino Suarez",745)
+    g.agregarArista("Pino Suarez","San Antonio Abad",817)
+    g.agregarArista("San Antonio Abad","Chabacano",642)
+    g.agregarArista("Chabacano","Viaducto",774)
+    g.agregarArista("Viaducto","Xola",490)
+    g.agregarArista("Xola","Villa de Cortes",698)
+    g.agregarArista("Villa de Cortes","Nativitas",750)
+    g.agregarArista("Nativitas","Portales",924)
+    g.agregarArista("Portales","Ermita",748)
+    g.agregarArista("Ermita","General Anaya",838)
+    g.agregarArista("General Anaya","Tasqueña",1330)
+    g.agregarArista("Indios Verdes","Deportivo 18 de Marzo",1166)
+    g.agregarArista("Deportivo 18 de Marzo","Potrero",966)
+    g.agregarArista("Potrero","La Raza",1106)
+    g.agregarArista("La Raza","Tlatelolco",1445)
+    g.agregarArista("Tlatelolco","Guerrero",1042)
+    g.agregarArista("Guerrero","Hidalgo",702)
+    g.agregarArista("Hidalgo","Juarez",251)
+    g.agregarArista("Juarez","Balderas",659)
+    g.agregarArista("Balderas","Niños Heroes",665)
+    g.agregarArista("Niños Heroes","Hospital General",559)
+    g.agregarArista("Hospital General","Centro Medico",653)
+    g.agregarArista("Centro Medico","Etiopia",1119)
+    g.agregarArista("Etiopia","Eugenia",950)
+    g.agregarArista("Eugenia","Division del Norte",715)
+    g.agregarArista("Division del Norte","Zapata",794)
+    g.agregarArista("Zapata","Coyoacan",1153)
+    g.agregarArista("Coyoacan","Viveros",908)
+    g.agregarArista("Viveros","Miguel Angel de Quevedo",824)
+    g.agregarArista("Miguel Angel de Quevedo","Copilco",1295)
+    g.agregarArista("Copilco","Universidad",1306)
+    g.agregarArista("Santa Anita","Jamaica",758)
+    g.agregarArista("Jamaica","Fray Servenado",1033)
+    g.agregarArista("Fray Servando","Candelaria",633)
+    g.agregarArista("Candelaria","Morelos",1062)
+    g.agregarArista("Morelos","Canal del Norte",910)
+    g.agregarArista("Canal del Norte","Consulado",884)
+    g.agregarArista("Consulado","Bondojito",645)
+    g.agregarArista("Bondojito","Talisman",959)
+    g.agregarArista("Talisman","Martin Carrera",1129)
+    g.agregarArista("Politecnico","Instituto del Petroleo",1188)
+    g.agregarArista("Instituto del Petroleo","Autobuses del Norte",1067)
+    g.agregarArista("Autobuses del Norte","La Raza",975)
+    g.agregarArista("La Raza","Misterios",892)
+    g.agregarArista("Misterios","Valle Gomez",969)
+    g.agregarArista("Valle Gomez","Consulado",679)
+    g.agregarArista("Consulado","Eduardo Molina",815)
+    g.agregarArista("Eduardo Molina","Aragon",860)
+    g.agregarArista("Aragon","Oceania",1219)
+    g.agregarArista("Oceania","Terminal Aerea",1174)
+    g.agregarArista("Terminal Aerea","Hangares",1153)
+    g.agregarArista("Hangares","Pantitlan",1644)
+    g.agregarArista("El Rosario","Tezozomoc",1257)
+    g.agregarArista("Tezozomoc","Azcapotzalco",973)
+    g.agregarArista("Azcapotzalco","Ferreria",1173)
+    g.agregarArista("Ferreria","Norte 45",1072)
+    g.agregarArista("Norte 45","Vallejo",660)
+    g.agregarArista("Vallejo","Instituto del Petroleo",755)
+    g.agregarArista("Instituto del Petroleo","Lindavista",1258)
+    g.agregarArista("Lindavista","Deportivo de 18 de Marzo",1075)
+    g.agregarArista("deportivo 18 de Marzo","La Villa",570)
+    g.agregarArista("La Villa","Martin Carrera",1141)
+    g.agregarArista("El Rosario","Aquiles Serdan",1615)
+    g.agregarArista("Aquiles Serdan","Camarones",1402)
+    g.agregarArista("Camarones","Refineria",952)
+    g.agregarArista("Refineria","Tacuba",1295)
+    g.agregarArista("Tacuba","San Joaquin",1433)
+    g.agregarArista("San Joaquin","Polanco",1163)
+    g.agregarArista("Polanco","Auditorio",812)
+    g.agregarArista("Auditorio","Constituyentes",1430)
+    g.agregarArista("Contituyentes","Tacubaya",1005)
+    g.agregarArista("Tacubaya","San Pedro de los pinos",1084)
+    g.agregarArista("San Pedro de los pinos","San Antonio",606)
+    g.agregarArista("San Antonio","Mixcoac",788)
+    g.agregarArista("Mixcoac","Barranca del Muerto",1476)
+    g.agregarArista("Garibaldi","Bellas Artes",634)
+    g.agregarArista("Bellas Artes","San Juan de Letran",456)
+    g.agregarArista("San Juan de Letran","Salto del agua",292)
+    g.agregarArista("Salto del Agua","Doctores",564)
+    g.agregarArista("Doctores","Obrera",761)
+    g.agregarArista("Obrera","Chabacano",1143)
+    g.agregarArista("Chabacano","La Viga",843)
+    g.agregarArista("La Viga","Santa Anita",633)
+    g.agregarArista("Santa Anita","Coyuya",968)
+    g.agregarArista("Coyuya","Iztacalco",993)
+    g.agregarArista("Iztacalco","Apatlaco",910)
+    g.agregarArista("Apatlaco","Aculco",534)
+    g.agregarArista("Aculco","Escuadrom 201",789)
+    g.agregarArista("Escuadron 201","Atlalilco",1738)
+    g.agregarArista("Atlalico","Iztapalapa",732)
+    g.agregarArista("Iztapalapa","Cerro de la Estrella",717)
+    g.agregarArista("Cerro de la Estrella","UAM",1135)
+    g.agregarArista("UAM","Constitucion de 1917",1137)
+    g.agregarArista("Pantitlan","Puebla",1380)
+    g.agregarArista("Puebla","Ciudad Deportiva",800)
+    g.agregarArista("Ciudad Deportiva","Velodoromo",1110)
+    g.agregarArista("Velodromo","Mixiuhca",821)
+    g.agregarArista("Mixiuhca","Jamaica",942)
+    g.agregarArista("Jamaica","Chabacano",1031)
+    g.agregarArista("Chabacano","Lazaro Cardenas",1000)
+    g.agregarArista("Lazaro Cardenas","Centro Medico",1059)
+    g.agregarArista("Centro Medico","Chilpancingo",1152)
+    g.agregarArista("Chilpancingo","Patriotismo",955)
+    g.agregarArista("Patriotismo","Tacubaya",1133)
+    g.agregarArista("Pantitlan","Agricola Oriental",1409)
+    g.agregarArista("Agricola Oriental","Canal de San Juan",1093)
+    g.agregarArista("Canal de San Juan","Tepalcates",1456)
+    g.agregarArista("Tepalcates","Guelatao",1161)
+    g.agregarArista("Guelatao","Peñon Viejo",2206)
+    g.agregarArista("Peñon viejo","Acatitla",1379)
+    g.agregarArista("Acatitla","Santa Marta",1100)
+    g.agregarArista("Santa Marta","Los Reyes",1783)
+    g.agregarArista("Los Reyes","La Paz",1956)
+    g.agregarArista("Ciudad Azteca","Plaza Aragon",574)
+    g.agregarArista("Plaza Aragon","Olimpica",709)
+    g.agregarArista("Olimpica","Ecatepec",596)
+    g.agregarArista("Ecatepec","Muzquiz",1485)
+    g.agregarArista("Muzquiz","Rio de los Remedios",1155)
+    g.agregarArista("Rio de los Remedios","Impulsora",436)
+    g.agregarArista("Impulsora","Nezahualcoyotl",1393)
+    g.agregarArista("Nezahualcoyotl","Villa de Aragon",1335)
+    g.agregarArista("Villa de Aragon","Bosques de Aragon",784)
+    g.agregarArista("Bosques de Aragon","Deportivo Oceania",1165)
+    g.agregarArista("Deportivo Oceania","Oceania",863)
+    g.agregarArista("Oceania","Romero Rubio",809)
+    g.agregarArista("Romero Ruibio","Ricardo Flores Magon",908)
+    g.agregarArista("Ricardo Flores Magon","San Lazaro",907)
+    g.agregarArista("San Lazaro","Morelos",1296)
+    g.agregarArista("Morelos","Tepito",498)
+    g.agregarArista("Tepito","Lagunilla",611)
+    g.agregarArista("Lagunilla","Garibaldi",474)
+    g.agregarArista("Garibaldi","Guerrero",757)
+    g.agregarArista("Guerrero","Buenavista",521)
+    g.agregarArista("Tlahuac","Tlatenco",1298)
+    g.agregarArista("Tlatenco","Zapotitlan",1115)
+    g.agregarArista("Zapotitlan","Nopalera",1276)
+    g.agregarArista("Nopalera","Olivos",1360)
+    g.agregarArista("Olivos","Tezonco",490)
+    g.agregarArista("Tezonco","Periferico Oriente",1545)
+    g.agregarArista("Periferico Oriente","Calle 11")
+    g.agregarArista("Calle 11","Lomas Estrella",906)
+    g.agregarArista("Lomas Estrella","San Andres Tomatlan",1060)
+    g.agregarArista("San Andres Tomatlan","Culhuacan",990)
+    g.agregarArista("Culhuacan","Atlalilco",1671)
+    g.agregarArista("Atlalilco","Mexicaltzingo",1922)
+    g.agregarArista("Mexicaltzingo","Ermita",1805)
+    g.agregarArista("Ermita","Eje Central",895)
+    g.agregarArista("Eje Central","Parque de los venados",1280)
+    g.agregarArista("Parque de los venados","Zapata",563)
+    g.agregarArista("Zapata","Hospital 20 de Noviembre",450)
+    g.agregarArista("Hospital 20 de Noviembre","Insurgentes Sur",725)
+    g.agregarArista("Insurgentes Sur","Mixcoac",651)
 
-
-
+    print("⧹n⧹nLa ruta mas rapida por Dijkstra junto con su costo es:")
+    g.dijkstra(1)
+    print(g.camino("Normal","Universidad"))
+    print("⧹n Los valores finales de la grafica son los siguientes:")
+    g.imprimirGrafica()
 
 
 
